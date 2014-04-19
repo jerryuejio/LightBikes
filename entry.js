@@ -1,4 +1,4 @@
-Bot.register ("JerryBot", function(game_state, my_state, done) {
+Bot.register ("Team Jerry", function(game_state, my_state, done) {
     var me = game_state.me;
     var board = game_state.board;
     var hexes = new Array();
@@ -61,7 +61,7 @@ Bot.register ("JerryBot", function(game_state, my_state, done) {
 	    var hex = region[j];
 	    if (hex.player === null) {
 		score += 1;
-		if (Math.abs(my_x - hex.x) < 2 || Math.abs(my_y - hex.y) < 2) {
+		if (Math.abs(my_x - hex.x) < 3 || Math.abs(my_y - hex.y) < 3) {
 		    score += 5;
 		}
 	    }
