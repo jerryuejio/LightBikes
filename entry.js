@@ -53,16 +53,39 @@ Bot.register ("Team Jerry", function(game_state, my_state, done) {
     }
     var best_score = 0;
     var best_region = 0;
-    for (var i = 0; i < safe_dirs.length; i ++) { 
+    var not_bad = new Array();
+    function possible(coor, level) {
+	var hex = board.get_hex_at(coor);
+	if (_.isNull(hex) || !_.isNull(hex.player)) {
+	    return 0;
+	}
+	else if (level == 0) {
+	    return 1;
+	}
+	var sum = 0;
+	for (var i = 0; i < 6; i ++) {
+	    sum += possible(board.new_coords_from_dir(coor, i), level - 1);
+	}
+	return sum;
+    };
+    for (var i = 0; i < safe_dirs.length; i ++) {
+	if (possible(board.new_coords_from_dir(me, safe_dirs[i]), 2) > 0) {
+	    not_bad.push(safe_dirs[i]);
+	}
+    }
+    for (var i = 0; i < not_bad.length; i ++) { 
 	var score = 0;
-	var region_num = safe_dirs[i];
+	var region_num = not_bad[i];
 	var region = regions[region_num];
 	for (var j = 0; j < region.length; j ++) {
 	    var hex = region[j];
 	    if (hex.player === null) {
 		score += 1;
-		if (Math.abs(my_x - hex.x) < 3 || Math.abs(my_y - hex.y) < 3) {
+		if (Math.abs(my_x - hex.x) < 2 || Math.abs(my_y - hex.y) < 2) {
 		    score += 5;
+		}
+		else if (Math.abs(my_x - hex.x) <  4 || Math.abs(my_y - hex.y) < 4) {
+		    score += 3;
 		}
 	    }
 	}
